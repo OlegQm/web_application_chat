@@ -1,3 +1,4 @@
+from _pytest.mark import deselect_by_keyword
 from langchain_openai import ChatOpenAI
 from langchain_core.messages.ai import AIMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
@@ -45,7 +46,6 @@ class GPTBot:
                  history.append(f"**You:** {message.content}")
             elif message.type == "ai":
                  history.append(f"**Bot:** {message.content}  \n")
-                
         return history
     
     def clear_history(self) -> None:
