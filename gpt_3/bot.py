@@ -30,17 +30,31 @@ class GPTBot:
         )
         self.__runnable_with_history = RunnableWithMessageHistory(
             runnable=self.__prompt | self.__model_instance,
-            get_session_history=self.get_session_history,
+            get_session_history=self.__get_session_history,
             input_messages_key="input",
             history_messages_key="history"
         )
 
-    def get_session_history(self) -> ChatMessageHistory:
+    def __get_session_history(self) -> ChatMessageHistory:
         return self.__conversation_history
+    
+    def get_formatted_history(self) -> list:
+        history = []
+        for message in self.__conversation_history.messages:
+            if message.type == "human":
+                 history.append(f"**You:** {message.content}")
+            elif message.type == "ai":
+                 history.append(f"**Bot:** {message.content}  \n")
+                
+        return history
+    
+    def clear_history(self) -> None:
+        self.__conversation_history = ChatMessageHistory()
 
     def ask_bot(self, message: str) -> AIMessage:
         response = self.__runnable_with_history.invoke({"input": message})
         return response
+    
 
 def main() -> None:
     api_key = os.getenv("OPENAI_API_KEY")
@@ -50,7 +64,7 @@ def main() -> None:
 
     messages = [
         "Hello, what is your name?",
-        "Tell me what I asked you in previous message."
+        "What did I ask you in previous message?"
     ]
     for message in messages:
         response = bot.ask_bot(message)

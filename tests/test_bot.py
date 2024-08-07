@@ -17,6 +17,5 @@ def test_bot_answer_length(bot: GPTBot) -> None:
 
 def test_bot_memory_length(bot: GPTBot) -> None:
     bot.ask_bot("What did I ask you last time?")
-    history_messages = bot.get_session_history().messages
-    history_messages_length = len(history_messages)
+    history_messages_length = len(bot.get_formatted_history())
     assert history_messages_length == 4

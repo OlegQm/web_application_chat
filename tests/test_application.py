@@ -12,11 +12,10 @@ def application(api_key):
     return Application(api_key)
 
 def test_initial_state(application):
-    assert "history" in st.session_state
-    assert st.session_state.history == []
+    assert len(application.bot_instanse.get_formatted_history()) == 0
     
 def test_history_cleaned(application):
-    st.session_state.history.append("Test")
-    assert len(st.session_state.history) == 1
+    application.bot_instanse.ask_bot("Hello!")
+    assert len(application.bot_instanse.get_formatted_history()) == 2
     application.clear_conversation()
-    assert st.session_state.history == []
+    assert len(application.bot_instanse.get_formatted_history()) == 0
