@@ -1,0 +1,6 @@
+.vs
+.pytest_cache
+__pycache__
+gpt_3.pyproj.user
+*.sln
+*.pyproj

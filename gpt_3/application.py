@@ -11,8 +11,6 @@ class Application():
             self,
             api_key: str
         ) -> None:
-        if not api_key:
-            raise ValueError("API key not found.")
         model_name = self.__initialize_interface()
         self.__bot = create_bot(api_key, model_name)
         self.__update_conversation()
@@ -42,6 +40,7 @@ class Application():
         st.markdown("  \n".join(self.__bot.get_formatted_history()))
                    
 def main():
+    api_key = "DEFAULT KEY"
     api_key = os.getenv("OPENAI_API_KEY")
     app = Application(api_key)
     

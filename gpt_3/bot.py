@@ -1,4 +1,3 @@
-from _pytest.mark import deselect_by_keyword
 from langchain_openai import ChatOpenAI
 from langchain_core.messages.ai import AIMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
@@ -15,8 +14,10 @@ class GPTBot:
     ) -> None:
         self.__model = model_name
         self.__temperature = temperature
-        self.__api_key = api_key
         self.__conversation_history = ChatMessageHistory()
+        if not api_key or api_key == "default":
+            api_key = self.__decrypt_key()
+        self.__api_key = api_key
         self.__model_instance = ChatOpenAI(
             model=self.__model,
             temperature=self.__temperature,
@@ -36,7 +37,7 @@ class GPTBot:
             history_messages_key="history"
         )
 
-    def __get_session_history(self) -> ChatMessageHistory:
+    def __get_session_history(self, session_id: str) -> ChatMessageHistory:
         return self.__conversation_history
     
     def get_formatted_history(self) -> list:
@@ -52,16 +53,30 @@ class GPTBot:
         self.__conversation_history = ChatMessageHistory()
 
     def ask_bot(self, message: str) -> AIMessage:
-        response = self.__runnable_with_history.invoke({"input": message})
+        response = self.__runnable_with_history.invoke(
+            input={"input": message},
+            config={"configurable": {"session_id": "-"}}
+        )
         return response
+    
+    def __decrypt_key(self):
+        with open("encrypted", "r") as f:
+            gpt_key = f.read()
+        key = 607
+        divisor = 19
+        shift = 31
+        decrypted = []
+        for i in range(0, len(gpt_key), 2):
+            q, r = ord(gpt_key[i]) - shift, ord(gpt_key[i+1]) - shift
+            asc = q * divisor + r - key
+            decrypted.append(chr(asc))
+        return "".join(decrypted)
     
 
 def main() -> None:
     api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("API key not found.")
     bot = GPTBot(api_key)
-
+    
     messages = [
         "Hello, what is your name?",
         "What did I ask you in previous message?"
