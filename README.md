@@ -70,7 +70,7 @@ After running these commands, your application will be accessible at: [http://lo
 
 ## Kubernetes
 
-To deploy the application to a Kubernetes cluster, ensure `kubectl` is installed, then run the following command:
+To deploy the application to a Kubernetes cluster, ensure `kubectl` is installed, then run the following command in `kubernetes` directory in this project:
 
 ```bash
 kubectl apply -f deployment.yaml
