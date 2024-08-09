@@ -1,6 +1,6 @@
 __pycache__/
 .vs/
 .pytest_cache/
-*.pyproj
-*.user
-*.sln
+gpt_3.pyproj
+gpt_3.pyproj.user
+gpt_3.sln
