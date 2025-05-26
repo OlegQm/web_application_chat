@@ -62,8 +62,8 @@ Once the container is running, your application will be accessible at: [http://l
 You can also use Docker Compose to build and run the application. Note that the current setup uses a built-in OpenAI key, which will be removed in future versions due to security concerns. To use your own key, configure the environment variable `OPENAI_API_KEY` with your value.
 
 ```bash
-docker-compose build --no-cache
-docker-compose up
+docker compose build --no-cache
+docker compose up
 ```
 
 After running these commands, your application will be accessible at: [http://localhost:8501/](http://localhost:8501/)
